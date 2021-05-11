@@ -6,23 +6,24 @@ import java.util.Scanner;
 
 class Graph {
 
-    // Add edge
-    static void addEdge(ArrayList<GraphEntry> g, int start_node, int end_node, float distance) {
+    private final ArrayList<GraphEntry> g = new ArrayList<>();
+
+    private void addEdge(int start_node, int end_node, float distance) {
         Edge to = new Edge(g.get(end_node).getNode(), distance);
         Edge from  = new Edge(g.get(start_node).getNode(), distance);
         g.get(start_node).getNeighbors().add(to);
         g.get(end_node).getNeighbors().add(from);
     }
 
-    static Scanner open(String path) throws FileNotFoundException {
+    private Scanner open(String path) throws FileNotFoundException {
         File nodes = new File(path);
         return new Scanner(nodes);
     }
-    static String[] getData(String line) {
+    private String[] getData(String line) {
         return line.split(" ");
     }
 
-    static void initializeGraph(ArrayList<GraphEntry> g) {
+    public void initialize() {
         try {
             Scanner nodes_reader = open(Constants.NODES_FILE);
             Scanner edges_reader = open(Constants.EDGES_FILE);
@@ -41,7 +42,7 @@ class Graph {
                 int start_node = Integer.parseInt(edges_line[1]);
                 int end_node = Integer.parseInt(edges_line[2]);
                 float distance = Float.parseFloat(edges_line[3]);
-                addEdge(g, start_node, end_node, distance);
+                addEdge(start_node, end_node, distance);
             }
             nodes_reader.close();
             edges_reader.close();
@@ -50,9 +51,8 @@ class Graph {
         }
     }
 
-    // Print the graph
-    static void dump(ArrayList<GraphEntry> g) throws FileNotFoundException {
-        PrintStream fileStream = new PrintStream(Constants.OUT);
+    public void dump(String path) throws FileNotFoundException {
+        PrintStream fileStream = new PrintStream(path);
         System.setOut(fileStream);
         for (GraphEntry entry : g) {
             System.out.println(entry);
@@ -62,9 +62,9 @@ class Graph {
 
     public static void main(String[] args) throws FileNotFoundException {
         // Create the graph
-        ArrayList<GraphEntry> g = new ArrayList<>();
-        initializeGraph(g);
+        Graph graph = new Graph();
+        graph.initialize();
         // dump the graph on disk
-        dump(g);
+        graph.dump(Constants.OUT);
     }
 }
