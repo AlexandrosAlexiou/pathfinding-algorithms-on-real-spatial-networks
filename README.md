@@ -10,7 +10,23 @@
 
 
 ### Download
+
+---
+
 ``` commandline
-    curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cnode --output cal.cnode && curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cedge --output cal.cedge
+curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cnode --output cal.cnode && curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cedge --output cal.cedge
 ```
 
+### Run graph initialization
+
+---
+
+In project root,
+``` commandline
+javac -d out Graph.java
+```
+
+In out folder,
+``` commandline
+java Graph > ../data/out.txt
+```
