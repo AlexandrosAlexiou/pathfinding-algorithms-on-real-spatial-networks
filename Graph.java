@@ -1,5 +1,6 @@
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintStream;
 import java.util.ArrayList;
 import java.util.Scanner;
 
@@ -50,19 +51,20 @@ class Graph {
     }
 
     // Print the graph
-    static void printGraph(ArrayList<GraphEntry> g) {
+    static void dump(ArrayList<GraphEntry> g) throws FileNotFoundException {
+        PrintStream fileStream = new PrintStream(Constants.OUT);
+        System.setOut(fileStream);
         for (GraphEntry entry : g) {
             System.out.println(entry);
         }
+        fileStream.close();
     }
 
-    public static void main(String[] args) {
-
+    public static void main(String[] args) throws FileNotFoundException {
         // Create the graph
-        //int V = 21048;
         ArrayList<GraphEntry> g = new ArrayList<>();
-
         initializeGraph(g);
-        printGraph(g);
+        // dump the graph on disk
+        dump(g);
     }
 }
