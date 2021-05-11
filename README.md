@@ -28,5 +28,5 @@ javac -d out Graph.java
 
 In out folder,
 ``` commandline
-java Graph > ../data/out.txt
+java Graph
 ```
