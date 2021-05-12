@@ -1,15 +1,15 @@
 import java.util.ArrayList;
 
 public class GraphEntry {
-    private final Node node;
+    private final Vertex vertex;
     private final ArrayList<Edge> neighbors = new ArrayList<>();
 
-    public GraphEntry(Node node) {
-        this.node = node;
+    public GraphEntry(Vertex vertex) {
+        this.vertex = vertex;
     }
 
-    public Node getNode() {
-        return node;
+    public Vertex getNode() {
+        return vertex;
     }
 
     public ArrayList<Edge> getNeighbors() {
@@ -22,6 +22,6 @@ public class GraphEntry {
         for (Edge edge : neighbors) {
             builder.append(edge.toString());
         }
-        return node.toString() + builder;
+        return vertex.toString() + builder;
     }
 }

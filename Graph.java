@@ -29,12 +29,8 @@ class Graph {
             Scanner edges_reader = open(Constants.EDGES_FILE);
             while (nodes_reader.hasNextLine()) {
                 String[] nodes_line = getData(nodes_reader.nextLine());
-                Node current_node = new Node(
-                        Integer.parseInt(nodes_line[0]),
-                        Float.parseFloat(nodes_line[1]),
-                        Float.parseFloat(nodes_line[2])
-                );
-                g.add(new GraphEntry(current_node));
+                Vertex vertex = new Vertex(nodes_line[0], Float.parseFloat(nodes_line[1]), Float.parseFloat(nodes_line[2]));
+                g.add(new GraphEntry(vertex));
             }
 
             while (edges_reader.hasNextLine()) {

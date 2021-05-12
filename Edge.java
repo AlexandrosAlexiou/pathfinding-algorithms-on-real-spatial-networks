@@ -1,14 +1,14 @@
 public class Edge {
-    private final Node neighbor;
+    private final Vertex destination;
     private final Float distance;
 
-    public Edge(Node neighbor, Float distance) {
-        this.neighbor = neighbor;
+    public Edge( Vertex destination, Float distance) {
+        this.destination = destination;
         this.distance = distance;
     }
 
-    public Node getNeighbor() {
-        return neighbor;
+    public Vertex getDestination() {
+        return destination;
     }
 
     public Float getDistance() {
@@ -17,6 +17,6 @@ public class Edge {
 
     @Override
     public String toString() {
-        return " " + this.neighbor.getId() + " " + this.distance;
+        return " " + this.destination.getId() + " " + this.distance;
     }
 }
