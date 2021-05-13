@@ -1,22 +1,28 @@
 public class Edge {
-    private final Vertex destination;
-    private final Float distance;
+    public final Vertex source;
+    public final Vertex dest;
+    public final Double distance;
 
-    public Edge( Vertex destination, Float distance) {
-        this.destination = destination;
+    public Edge(Vertex source, Vertex dest, Double distance) {
+        this.source = source;
+        this.dest = dest;
         this.distance = distance;
     }
 
-    public Vertex getDestination() {
-        return destination;
+    public Vertex getSource() {
+        return source;
     }
 
-    public Float getDistance() {
+    public Vertex getDest() {
+        return dest;
+    }
+
+    public Double getDistance() {
         return distance;
     }
 
     @Override
     public String toString() {
-        return " " + this.destination.getId() + " " + this.distance;
+        return " " + this.dest.getId() + " " + this.distance;
     }
 }
