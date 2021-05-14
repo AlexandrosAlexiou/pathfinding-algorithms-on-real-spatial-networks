@@ -7,6 +7,7 @@ public class Vertex implements Comparable<Vertex> {
     private boolean visited;
     private Vertex previous;
     private double distance = Double.MAX_VALUE;
+    private double prediction = 0.0;
     private final ArrayList<Edge> adj = new ArrayList<>();
 
     public Vertex(String id, Double longitude, Double latitude) {
@@ -19,12 +20,8 @@ public class Vertex implements Comparable<Vertex> {
         return id;
     }
 
-    public Double getLongitude() {
-        return longitude;
-    }
-
-    public Double getLatitude() {
-        return latitude;
+    public double[] getLocation() {
+        return new double[]{longitude, latitude};
     }
 
     public boolean isVisited() {
@@ -39,6 +36,10 @@ public class Vertex implements Comparable<Vertex> {
         return distance;
     }
 
+    public double getPrediction() {
+        return prediction;
+    }
+
     public ArrayList<Edge> getAdj() {
         return adj;
     }
@@ -51,8 +52,18 @@ public class Vertex implements Comparable<Vertex> {
         this.distance = distance;
     }
 
+    public void setPrediction(double prediction) {
+        this.prediction = prediction;
+    }
+
     public void setPrevious(Vertex previous) {
         this.previous = previous;
+    }
+
+    public double distance(Vertex other){
+        double ycoord = Math.abs(this.latitude - other.latitude);
+        double xcoord = Math.abs(this.longitude - other.longitude);
+        return Math.sqrt(ycoord*ycoord + xcoord*xcoord);
     }
 
     @Override
@@ -83,12 +94,12 @@ public class Vertex implements Comparable<Vertex> {
         for (Edge edge : adj) {
             builder.append(edge.toString());
         }
-        return this.id + " " + getLongitude() + " " + getLatitude() + builder;
+        return this.id + " " + longitude + " " + latitude + builder;
     }
 
     @Override
     public int compareTo(Vertex other) {
-        return Double.compare(this.distance, other.getDistance());
+        return Double.compare(this.distance + prediction, other.getDistance() + other.getPrediction());
     }
 
 }

@@ -67,16 +67,33 @@ class Graph {
         fw.close();
     }
 
+    public void reset() {
+        for (Vertex vertex : vertices) {
+            vertex.setPrediction(0.0);
+            vertex.setDistance(Double.MAX_VALUE);
+            vertex.setPrevious(null);
+            vertex.setVisited(false);
+        }
+    }
+
     public static void main(String[] args) throws IOException {
+        int source = Integer.parseInt(args[0]);
+        int target = Integer.parseInt(args[1]);
+
         // Create the graph
         Graph graph = new Graph();
         graph.initialize();
         // dump the graph on disk
         graph.dump(Constants.OUT);
+
         // Run Dijkstra
         Dijkstra dijkstra = new Dijkstra(graph);
-        int source = Integer.parseInt(args[0]);
-        int target = Integer.parseInt(args[1]);
         dijkstra.computeShortestPaths(source, target);
+        graph.reset();
+
+        // Run Astar
+        Astar astar = new Astar(graph);
+        astar.computeShortestPaths(source, target);
+        graph.reset();
     }
 }
