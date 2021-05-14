@@ -28,5 +28,6 @@ javac -d out Graph.java
 
 In out folder,
 ``` commandline
-java Graph
+java Graph 0 55
 ```
+to find Shortest path from node `0` to node `55` using A* and Dijkstra.
