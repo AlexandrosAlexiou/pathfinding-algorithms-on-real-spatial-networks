@@ -32,7 +32,7 @@ public class Astar {
 
                     double newDistance = actualVertex.getDistance() + edge.getDistance() + neighbor.getPrediction();
 
-                    if (newDistance < neighbor.getDistance()) {
+                    if (newDistance < neighbor.getDistance() + neighbor.getPrediction()) {
                         priorityQueue.remove(neighbor);
                         neighbor.setDistance(actualVertex.getDistance() + edge.getDistance());
                         neighbor.setPrevious(actualVertex);
