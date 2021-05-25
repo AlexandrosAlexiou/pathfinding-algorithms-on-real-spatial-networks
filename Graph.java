@@ -86,11 +86,13 @@ class Graph {
         // dump the graph on disk
         graph.dump(Constants.OUT);
 
+        System.out.println();
         // Run Dijkstra
         Dijkstra dijkstra = new Dijkstra(graph);
         dijkstra.computeShortestPaths(source, target);
         graph.reset();
 
+        System.out.println();
         // Run Astar
         Astar astar = new Astar(graph);
         astar.computeShortestPaths(source, target);

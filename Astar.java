@@ -18,10 +18,11 @@ public class Astar {
         PriorityQueue<Vertex> priorityQueue = new PriorityQueue<>();
         priorityQueue.add(sourceVertex);
         sourceVertex.setVisited(true);
-        int loops = 0;
+        int nodes_visited = 0;
         while (!priorityQueue.isEmpty()) {
             Vertex actualVertex = priorityQueue.poll(); // Get the minimum distance vertex from priority queue
-            loops++;
+            actualVertex.setVisited(true);
+            nodes_visited++;
 
             if (actualVertex == targetVertex) break; //reached target and found the min dist
 
@@ -40,11 +41,13 @@ public class Astar {
                     }
                 }
             }
-            actualVertex.setVisited(true);
         }
-        System.out.println("Astar loops: " + loops);
-        System.out.println("Minimum distance from "+ source_id + " to " + target_id + ": " + targetVertex.getDistance());
-        System.out.println("Path from "+ source_id + " to " + target_id + ": " + getShortestPathTo(targetVertex));
+        List<String> shortestPath = getShortestPathTo(targetVertex);
+        System.out.println("Astar:");
+        System.out.println("Shortest Path length: " + shortestPath.size());
+        System.out.println("Minimum path distance from "+ source_id + " to " + target_id + " = " + targetVertex.getDistance());
+        System.out.println("Shortest Path from "+ source_id + " to " + target_id + " = " + shortestPath);
+        System.out.println("Number of visited nodes = " + nodes_visited);
     }
 
     public List<String> getShortestPathTo(Vertex targetVertex) {
