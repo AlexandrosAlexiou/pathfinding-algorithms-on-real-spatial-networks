@@ -4,7 +4,6 @@ public class Vertex implements Comparable<Vertex> {
     private final String id;
     private final Double longitude;
     private final Double latitude;
-    private boolean visited;
     private Vertex previous;
     private double distance = Double.MAX_VALUE;
     private double prediction = 0.0;
@@ -24,10 +23,6 @@ public class Vertex implements Comparable<Vertex> {
         return new double[]{longitude, latitude};
     }
 
-    public boolean isVisited() {
-        return visited;
-    }
-
     public Vertex getPrevious() {
         return previous;
     }
@@ -42,10 +37,6 @@ public class Vertex implements Comparable<Vertex> {
 
     public ArrayList<Edge> getAdj() {
         return adj;
-    }
-
-    public void setVisited(boolean visited) {
-        this.visited = visited;
     }
 
     public void setDistance(double distance) {

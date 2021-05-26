@@ -72,7 +72,6 @@ class Graph {
             vertex.setPrediction(0.0);
             vertex.setDistance(Double.MAX_VALUE);
             vertex.setPrevious(null);
-            vertex.setVisited(false);
         }
     }
 
