@@ -7,7 +7,8 @@ public class Vertex implements Comparable<Vertex> {
     private Vertex previous;
     private double distance = Double.MAX_VALUE;
     private double prediction = 0.0;
-    private final ArrayList<Edge> adj = new ArrayList<>();
+    private ArrayList<Edge> adj = new ArrayList<>();
+    private int visits;
 
     public Vertex(String id, Double longitude, Double latitude) {
         this.id = id;
@@ -17,6 +18,10 @@ public class Vertex implements Comparable<Vertex> {
 
     public String getId() {
         return id;
+    }
+
+    public Integer getIntegerId() {
+        return Integer.parseInt(id);
     }
 
     public double[] getLocation() {
@@ -39,6 +44,14 @@ public class Vertex implements Comparable<Vertex> {
         return adj;
     }
 
+    public int getVisits() {
+        return visits;
+    }
+
+    public void advanceVisits() {
+        this.visits += 1;
+    }
+
     public void setDistance(double distance) {
         this.distance = distance;
     }
@@ -49,6 +62,14 @@ public class Vertex implements Comparable<Vertex> {
 
     public void setPrevious(Vertex previous) {
         this.previous = previous;
+    }
+
+    public void setAdj(ArrayList<Edge> adj) {
+        this.adj = adj;
+    }
+
+    public void setVisits(int visits) {
+        this.visits = visits;
     }
 
     public double distance(Vertex other){
@@ -93,4 +114,10 @@ public class Vertex implements Comparable<Vertex> {
         return Double.compare(this.distance + prediction, other.getDistance() + other.getPrediction());
     }
 
+    public Vertex deepCopy() {
+        Vertex copy = new Vertex(this.id, this.longitude, this.latitude);
+        copy.setAdj(new ArrayList<Edge>(this.getAdj()));
+        copy.setVisits(this.getVisits());
+        return copy;
+    }
 }

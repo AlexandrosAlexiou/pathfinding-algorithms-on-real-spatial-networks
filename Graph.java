@@ -18,6 +18,10 @@ class Graph {
         return edges;
     }
 
+    public Vertex getVertex(int id) {
+        return vertices.get(id);
+    }
+
     public void initialize() {
         try {
             Scanner nodes_reader = open(Constants.NODES_FILE);
