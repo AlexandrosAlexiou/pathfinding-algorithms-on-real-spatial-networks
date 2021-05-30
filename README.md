@@ -17,17 +17,26 @@
 curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cnode --output cal.cnode && curl http://www.cs.utah.edu/~lifeifei/research/tpq/cal.cedge --output cal.cedge
 ```
 
-### Run graph initialization
+### Compile
 
 ---
 
 In project root,
 ``` commandline
-javac -d out Graph.java
+make
 ```
 
-In out folder,
-``` commandline
-java Graph 0 55
-```
-to find Shortest path from node `0` to node `55` using A* and Dijkstra.
+### Run
+
+- Shortest Path algorithms,
+    ``` commandline
+    java Graph 0 55
+    ```
+    to find Shortest path from node `0` to node `55` using Dijkstra and A*.
+
+
+- Best meeting node,
+    ``` commandline
+    java NRA 1 6 10
+    ```
+    to find best meeting node for nodes `1`, `6`, `10` using the Top-K NRA algorithm.

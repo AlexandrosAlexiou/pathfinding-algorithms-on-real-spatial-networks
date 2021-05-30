@@ -28,6 +28,11 @@ public class NRA {
     };
 
     private final Graph graph;
+    private final HashMap<Vertex, ArrayList<Double>> SPDs = new HashMap<>();
+    private final HashMap<Vertex, ArrayList<ArrayList<Vertex>>> paths = new HashMap<>();
+    private final HashMap<Vertex, ArrayList<Boolean>> visited = new HashMap<>();
+    private final HashMap<Vertex, Vertex> last_visited = new HashMap<>();
+    private final HashMap<Vertex, PriorityQueue<VertexInQueue>> priorityQueues = new HashMap<>();
 
     public NRA(Graph graph) {
         this.graph = graph;
@@ -40,26 +45,24 @@ public class NRA {
         }
         return deepCopy;
     }
-    private double getMinimumMaximumDistance(HashMap<Vertex, ArrayList<Double>> SPDs, HashMap<Vertex, Vertex> last_visited) {
+
+    private double getMinimumMaximumDistance() {
         double min_distance = Double.MAX_VALUE;
 
         for (Vertex v : last_visited.keySet()) {
             double max_distance = Double.MIN_VALUE;
-            if (v.getVisits() < SPDs.keySet().size()) {
-                for (Vertex start : SPDs.keySet()) {
-                    if (SPDs.get(start).get(v.getIntegerId()) > max_distance && SPDs.get(start).get(v.getIntegerId()) != Double.MAX_VALUE) {
+            if (v.getVisits() < SPDs.keySet().size())
+                for (Vertex start : SPDs.keySet())
+                    if (SPDs.get(start).get(v.getIntegerId()) > max_distance && SPDs.get(start).get(v.getIntegerId()) != Double.MAX_VALUE)
                         max_distance = SPDs.get(start).get(v.getIntegerId());
-                    }
-                }
-            }
-            if (max_distance < min_distance) {
+
+            if (max_distance < min_distance)
                 min_distance = max_distance;
-            }
         }
         return min_distance;
     }
 
-    private int getMinimumDistanceNodeId(HashMap<Vertex, ArrayList<Double>> SPDs, HashMap<Vertex, Vertex> last_visited) {
+    private int getMinimumDistanceNodeId() {
         double minimum_distance = Double.MAX_VALUE;
         int minimum_distance_node_id = -1;
         for (Vertex v : SPDs.keySet()) {
@@ -76,12 +79,6 @@ public class NRA {
     public void findOptimalMeetingPoint(int[] users) {
         int meeting_node_id = Integer.MIN_VALUE;
         double meeting_node_distance = Double.MAX_VALUE;
-
-        HashMap<Vertex, ArrayList<Double>> SPDs = new HashMap<>();
-        HashMap<Vertex, ArrayList<ArrayList<Vertex>>> paths = new HashMap<>();
-        HashMap<Vertex, ArrayList<Boolean>> visited = new HashMap<>();
-        HashMap<Vertex, Vertex> last_visited = new HashMap<>();
-        HashMap<Vertex, PriorityQueue<VertexInQueue>> priorityQueues = new HashMap<>();
 
         for (int v_id : users) {
             Vertex v = graph.getVertex(v_id);
@@ -102,9 +99,9 @@ public class NRA {
             priorityQueues.get(v).add(new VertexInQueue(v, 0.0));
         }
 
-        while (!(meeting_node_id != Integer.MIN_VALUE && meeting_node_distance > getMinimumMaximumDistance(SPDs, last_visited))) {
+        while (!(meeting_node_id != Integer.MIN_VALUE && meeting_node_distance > getMinimumMaximumDistance())) {
 
-            int v_id = getMinimumDistanceNodeId(SPDs, last_visited);
+            int v_id = getMinimumDistanceNodeId();
             VertexInQueue viq = priorityQueues.get(graph.getVertex(v_id)).poll();
 
             visited.get(graph.getVertex(v_id)).set(viq.getV().getIntegerId(), true);
@@ -148,7 +145,7 @@ public class NRA {
         for (int user : users) {
             ArrayList<Vertex> temp = paths.get(graph.getVertex(user)).get(meeting_node_id);
             List<Integer> path = temp.stream().map(Vertex::getIntegerId).collect(Collectors.toList());
-            System.out.println("[" + SPDs.get(graph.getVertex(user)).get(meeting_node_id) + "," +  path + "]");
+            System.out.println("[" + SPDs.get(graph.getVertex(user)).get(meeting_node_id) + ", " +  path + "]");
             System.out.println();
         }
     }
