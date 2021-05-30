@@ -27,6 +27,16 @@ public class NRA {
         }
     };
 
+    static class MinimumDistanceVertex {
+        int vertexId;
+        double distance;
+
+        public MinimumDistanceVertex(int vertexId, double distance) {
+            this.vertexId = vertexId;
+            this.distance = distance;
+        }
+    }
+
     private final Graph graph;
     private final HashMap<Vertex, ArrayList<Double>> SPDs = new HashMap<>();
     private final HashMap<Vertex, ArrayList<ArrayList<Vertex>>> paths = new HashMap<>();
@@ -47,39 +57,15 @@ public class NRA {
     }
 
     /**
-     *  Returns the dist(ni, mi) = min(dist(n1, m1), dist(n2, m2), ..., dist(nν, mν))
-     *
-     *  The starting nodes are n1, n2, ..., nν and the last nodes we have visited from them
-     *  are m1, m2, ..., mν respectively.
-     *
-     * @return  The minimum distance
-     */
-    private double getMinimumMaximumDistance() {
-        double min_distance = Double.MAX_VALUE;
-
-        for (Vertex v : last_nodes_visited_from_starting_nodes.keySet()) {
-            double max_distance = Double.MIN_VALUE;
-            if (v.getVisits() < SPDs.keySet().size())
-                for (Vertex start : SPDs.keySet())
-                    if (SPDs.get(start).get(v.getIntegerId()) > max_distance && SPDs.get(start).get(v.getIntegerId()) != Double.MAX_VALUE)
-                        max_distance = SPDs.get(start).get(v.getIntegerId());
-
-            if (max_distance < min_distance)
-                min_distance = max_distance;
-        }
-        return min_distance;
-    }
-
-    /**
      *  Returns  the vertex id which satisfies the condition:
      *  min(dist(n1, m1), dist(n2, m2), ..., dist(nν, mν)) = dist(ni, mi)
      *
      *  The starting nodes are n1, n2, ..., nν and the last nodes we have visited from them
      *  are m1, m2, ..., mν respectively.
      *
-     * @return  the ni, Dijkstra will continue from there
+     * @return the (ni, mi) encapsulated in the MinimumDistanceVertex class, Dijkstra will continue from there.
      */
-    private int getMinimumDistanceNodeId() {
+    private MinimumDistanceVertex getMinimumDistanceVertex() {
         double minimum_distance = Double.MAX_VALUE;
         int minimum_distance_node_id = -1;
         for (Vertex v : SPDs.keySet()) {
@@ -90,13 +76,13 @@ public class NRA {
                 minimum_distance_node_id = v.getIntegerId();
             }
         }
-        return minimum_distance_node_id;
+        return new MinimumDistanceVertex(minimum_distance_node_id, minimum_distance);
     }
 
     /**
      * Calculates and prints the best meeting point given the users (Vertex_ids)
      *
-     * @param  users  the users who want to meet
+     * @param users: the users who want to meet
      */
     public void findOptimalMeetingPoint(int[] users) {
         int meeting_node_id = Integer.MIN_VALUE;
@@ -121,9 +107,10 @@ public class NRA {
             priorityQueues.get(v).add(new VertexInQueue(v, 0.0));
         }
 
-        while (!(meeting_node_id != Integer.MIN_VALUE && meeting_node_distance > getMinimumMaximumDistance())) {
+        MinimumDistanceVertex minimumDistanceVertex = getMinimumDistanceVertex();
+        while (!(meeting_node_id != Integer.MIN_VALUE && meeting_node_distance > minimumDistanceVertex.distance)) {
 
-            int v_id = getMinimumDistanceNodeId();
+            int v_id = minimumDistanceVertex.vertexId;
             VertexInQueue viq = priorityQueues.get(graph.getVertex(v_id)).poll();
 
             visited.get(graph.getVertex(v_id)).set(viq.getV().getIntegerId(), true);
@@ -160,6 +147,7 @@ public class NRA {
                     }
                 }
             }
+            minimumDistanceVertex = getMinimumDistanceVertex();
         }
 
         System.out.println("Best meeting point: " + meeting_node_id);
