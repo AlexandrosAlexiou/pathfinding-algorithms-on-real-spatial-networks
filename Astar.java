@@ -31,7 +31,7 @@ public class Astar {
             for (Edge edge : actualVertex.getAdj()) {
                 Vertex neighbor = edge.getDest();
                 if (!visited.contains(Integer.parseInt(neighbor.getId()))) {
-                    neighbor.setPrediction(neighbor.distance(targetVertex));
+                    neighbor.setPrediction(neighbor.get_euclidean_distance(targetVertex));
 
                     double newDistance = actualVertex.getDistance() + edge.getDistance() + neighbor.getPrediction();
 
@@ -52,7 +52,7 @@ public class Astar {
         System.out.println("Number of visited nodes = " + visited.size());
     }
 
-    public List<String> getShortestPathTo(Vertex targetVertex) {
+    private List<String> getShortestPathTo(Vertex targetVertex) {
         List<String> path = new ArrayList<>();
 
         for (Vertex vertex = targetVertex; vertex != null; vertex = vertex.getPrevious()) {

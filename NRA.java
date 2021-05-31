@@ -62,7 +62,7 @@ public class NRA {
     }
 
     private final Graph graph;
-    private final HashMap<Vertex, ArrayList<Double>> SPDs = new HashMap<>();
+    private final HashMap<Vertex, ArrayList<Double>> shortest_path_distances = new HashMap<>();
     private final HashMap<Vertex, ArrayList<ArrayList<Vertex>>> paths = new HashMap<>();
     private final HashMap<Vertex, ArrayList<Boolean>> visited = new HashMap<>();
     private final HashMap<Vertex, Vertex> last_nodes_visited_from_starting_nodes = new HashMap<>();
@@ -91,10 +91,10 @@ public class NRA {
      */
     private MinimumDistanceVertex getMinimumDistanceVertex() {
         double minimum_distance = Double.MAX_VALUE;
-        int minimum_distance_node_id = -1;
-        for (Vertex v : SPDs.keySet()) {
+        int minimum_distance_node_id = Integer.MIN_VALUE;
+        for (Vertex v : shortest_path_distances.keySet()) {
             Vertex last_visited_vertex = last_nodes_visited_from_starting_nodes.get(v);
-            double distance = SPDs.get(v).get(last_visited_vertex.getIntegerId());
+            double distance = shortest_path_distances.get(v).get(last_visited_vertex.getIntegerId());
             if (distance < minimum_distance) {
                 minimum_distance = distance;
                 minimum_distance_node_id = v.getIntegerId();
@@ -114,7 +114,7 @@ public class NRA {
 
         for (int v_id : users) {
             Vertex v = graph.getVertex(v_id);
-            SPDs.put(v, new ArrayList<>());
+            shortest_path_distances.put(v, new ArrayList<>());
             paths.put(v, new ArrayList<>());
             visited.put(v, new ArrayList<>());
             v.advanceVisits();
@@ -122,12 +122,12 @@ public class NRA {
             priorityQueues.put(v, new PriorityQueue<>());
 
             for (Vertex graphVertex : graph.getVertices()) {
-                SPDs.get(v).add(Double.MAX_VALUE);
+                shortest_path_distances.get(v).add(Double.MAX_VALUE);
                 paths.get(v).add(new ArrayList<>());
                 paths.get(v).get(paths.get(v).size() - 1).add(v);
                 visited.get(v).add(false);
             }
-            SPDs.get(v).set(v_id, 0.0);
+            shortest_path_distances.get(v).set(v_id, 0.0);
             priorityQueues.get(v).add(new VertexInQueue(v, 0.0));
         }
 
@@ -146,9 +146,9 @@ public class NRA {
             // every user has visited a node, we check for meeting point
             if (viq.getV().getVisits() == users.length) {
                 double distance = Double.MIN_VALUE;
-                for (Vertex v : SPDs.keySet()) {
-                    if (SPDs.get(v).get(viq.getV().getIntegerId()) > distance)
-                        distance = SPDs.get(v).get(viq.getV().getIntegerId());
+                for (Vertex v : shortest_path_distances.keySet()) {
+                    if (shortest_path_distances.get(v).get(viq.getV().getIntegerId()) > distance)
+                        distance = shortest_path_distances.get(v).get(viq.getV().getIntegerId());
                 }
                 if (distance < meeting_node_distance) {
                     meeting_node_distance = distance;
@@ -160,11 +160,11 @@ public class NRA {
             for (Edge edge : viq.getV().getAdj()) {
                 Vertex neighbor = edge.getDest();
                 if (!visited.get(graph.getVertex(v_id)).get(neighbor.getIntegerId())) {
-                    if (SPDs.get(graph.getVertex(v_id)).get(neighbor.getIntegerId()) >
-                            SPDs.get(graph.getVertex(v_id)).get(viq.getV().getIntegerId()) + edge.getDistance()) {
-                        SPDs.get(graph.getVertex(v_id)).set(neighbor.getIntegerId(), SPDs.get(graph.getVertex(v_id)).get(viq.getV().getIntegerId()) + edge.getDistance());
+                    if (shortest_path_distances.get(graph.getVertex(v_id)).get(neighbor.getIntegerId()) >
+                            shortest_path_distances.get(graph.getVertex(v_id)).get(viq.getV().getIntegerId()) + edge.getDistance()) {
+                        shortest_path_distances.get(graph.getVertex(v_id)).set(neighbor.getIntegerId(), shortest_path_distances.get(graph.getVertex(v_id)).get(viq.getV().getIntegerId()) + edge.getDistance());
 
-                        VertexInQueue new_V = new VertexInQueue(neighbor, SPDs.get(graph.getVertex(v_id)).get(neighbor.getIntegerId()));
+                        VertexInQueue new_V = new VertexInQueue(neighbor, shortest_path_distances.get(graph.getVertex(v_id)).get(neighbor.getIntegerId()));
 
                         ArrayList<Vertex> temp = paths.get(graph.getVertex(v_id)).get(viq.getV().getIntegerId());
                         ArrayList<Vertex> n = cloneArraylist(temp);
@@ -186,7 +186,7 @@ public class NRA {
                     .stream()
                     .map(Vertex::getIntegerId)
                     .collect(Collectors.toList());
-            System.out.println("[" + SPDs.get(graph.getVertex(user)).get(meeting_node_id) + ", " +  path + "]");
+            System.out.println("[" + shortest_path_distances.get(graph.getVertex(user)).get(meeting_node_id) + ", " +  path + "]");
         }
     }
 

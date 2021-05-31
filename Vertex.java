@@ -74,7 +74,7 @@ public class Vertex implements Comparable<Vertex> {
         this.visits = visits;
     }
 
-    public double distance(Vertex other){
+    public double get_euclidean_distance(Vertex other){
         double ycoord = Math.abs(this.latitude - other.latitude);
         double xcoord = Math.abs(this.longitude - other.longitude);
         return Math.sqrt(ycoord*ycoord + xcoord*xcoord);

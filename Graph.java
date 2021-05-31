@@ -58,8 +58,8 @@ class Graph {
     }
 
     private Scanner open(String path) throws FileNotFoundException {
-        File nodes = new File(path);
-        return new Scanner(nodes);
+        File file = new File(path);
+        return new Scanner(file);
     }
 
     private String[] getData(String line) {

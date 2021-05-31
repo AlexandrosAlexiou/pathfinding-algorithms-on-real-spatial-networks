@@ -49,7 +49,7 @@ public class Dijkstra {
         System.out.println("Number of visited nodes = " + visited.size());
     }
 
-    public List<String> getShortestPathTo(Vertex targetVertex) {
+    private List<String> getShortestPathTo(Vertex targetVertex) {
         List<String> path = new ArrayList<>();
 
         for (Vertex vertex = targetVertex; vertex != null; vertex = vertex.getPrevious()) {
