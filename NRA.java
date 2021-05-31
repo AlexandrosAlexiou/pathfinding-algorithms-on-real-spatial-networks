@@ -1,3 +1,5 @@
+// ALEXANDROS ALEXIOU 2929
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -19,6 +21,28 @@ public class NRA {
 
         public double getDistance() {
             return distance;
+        }
+
+        @Override
+        public int hashCode() {
+            final int prime = 31;
+            int result = 1;
+            result = prime * result + ((v.getId() == null) ? 0 : v.getIntegerId().hashCode());
+            return result;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (this == obj)
+                return true;
+            if (obj == null)
+                return false;
+            if (getClass() != obj.getClass())
+                return false;
+            VertexInQueue other = (VertexInQueue) obj;
+            if (v.getIntegerId() == null) {
+                return other.v.getIntegerId() == null;
+            } else return v.getIntegerId().equals(other.v.getIntegerId());
         }
 
         @Override
@@ -117,6 +141,7 @@ public class NRA {
             graph.getVertex(viq.getV().getIntegerId()).advanceVisits();
             last_nodes_visited_from_starting_nodes.put(graph.getVertex(v_id), viq.getV());
 
+            // every user has visited a node, we check for meeting point
             if (viq.getV().getVisits() == users.length) {
                 double distance = Double.MIN_VALUE;
                 for (Vertex v : SPDs.keySet()) {
@@ -129,6 +154,7 @@ public class NRA {
                 }
             }
 
+            // Dijkstra
             for (Edge edge : viq.getV().getAdj()) {
                 Vertex neighbor = edge.getDest();
                 if (!visited.get(graph.getVertex(v_id)).get(neighbor.getIntegerId())) {
