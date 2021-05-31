@@ -137,6 +137,8 @@ public class NRA {
             int v_id = minimumDistanceVertex.vertexId;
             VertexInQueue viq = priorityQueues.get(graph.getVertex(v_id)).poll();
 
+            if (viq == null) break; // cant find better meeting point
+
             visited.get(graph.getVertex(v_id)).set(viq.getV().getIntegerId(), true);
             graph.getVertex(viq.getV().getIntegerId()).advanceVisits();
             last_nodes_visited_from_starting_nodes.put(graph.getVertex(v_id), viq.getV());
