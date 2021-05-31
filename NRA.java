@@ -91,7 +91,7 @@ public class NRA {
      */
     private MinimumDistanceVertex getMinimumDistanceVertex() {
         double minimum_distance = Double.MAX_VALUE;
-        int minimum_distance_node_id = Integer.MIN_VALUE;
+        int minimum_distance_node_id = -1;
         for (Vertex v : shortest_path_distances.keySet()) {
             Vertex last_visited_vertex = last_nodes_visited_from_starting_nodes.get(v);
             double distance = shortest_path_distances.get(v).get(last_visited_vertex.getIntegerId());
@@ -109,7 +109,7 @@ public class NRA {
      * @param users: the users who want to meet
      */
     public void findOptimalMeetingPoint(int[] users) {
-        int meeting_node_id = Integer.MIN_VALUE;
+        int meeting_node_id = -1;
         double meeting_node_distance = Double.MAX_VALUE;
 
         for (int v_id : users) {
@@ -132,7 +132,7 @@ public class NRA {
         }
 
         MinimumDistanceVertex minimumDistanceVertex = getMinimumDistanceVertex();
-        while (!(meeting_node_id != Integer.MIN_VALUE && meeting_node_distance > minimumDistanceVertex.distance)) {
+        while (meeting_node_id == -1 || meeting_node_distance > minimumDistanceVertex.distance) {
 
             int v_id = minimumDistanceVertex.vertexId;
             VertexInQueue viq = priorityQueues.get(graph.getVertex(v_id)).poll();
