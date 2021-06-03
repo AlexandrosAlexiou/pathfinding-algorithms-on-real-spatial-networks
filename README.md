@@ -1,4 +1,4 @@
-# <div align="center">Top-K Queries using a Spatial Network</div>
+# <div align="center">Top-K Queries on a Spatial Network</div>
 
 ---
 
